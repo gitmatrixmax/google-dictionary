@@ -7,9 +7,9 @@
     "dev:server": "nodemon --watch server --exec node server/index.js",
     "dev:client": "cd client && npm run dev",
     "build": "cd client && npm install && npm run build",
-    "vercel-build": "npm run build",
     "start": "node server/index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:all": "npm test && cd client && npm test -- --run"
   },
   "dependencies": {
     "axios": "^1.4.0",

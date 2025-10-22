@@ -84,23 +84,121 @@ npm run build
 npm start
 ```
 
-## Deployment (Vercel)
+## Deployment
 
-This project is configured for easy deployment to [Vercel](https://vercel.com).
+This project is configured as a **single Express server** that serves both the API and the built frontend files. This makes deployment simpler and more cost-effective.
 
-### Setup on Vercel
+### Local Production Build
 
-1.  **Create a Vercel Account**: Sign up for a free account at [vercel.com](https://vercel.com).
-2.  **New Project**: Create a new project and connect it to your Git repository (GitHub, GitLab, etc.).
-3.  **Configure Project**: Vercel will automatically detect the monorepo structure.
-    *   **Framework Preset**: Select `Other`.
-    *   **Build Command**: `npm run vercel-build`
-    *   **Output Directory**: `client/dist`
-    *   **Install Command**: `npm install`
-4.  **Add Environment Variables**: In the project settings on Vercel, add the same environment variables from your local `.env` file (e.g., `GOOGLE_API_KEY`, `GOOGLE_CX_ID`, etc.). This is crucial for the dictionary and image search to work.
-5.  **Deploy**: Click "Deploy". Vercel will build and deploy your application.
+To test the production build locally:
 
-The `vercel.json` file in the root of the project handles the routing for the monorepo, ensuring that API requests are sent to the backend and all other requests are served by the React frontend.
+```powershell
+# Build the frontend
+npm run build
+
+# Start the server (serves both API and frontend)
+npm start
+```
+
+The server will run on http://localhost:4000 and serve:
+- Frontend: `http://localhost:4000` (React app)
+- API: `http://localhost:4000/api/*` (Express endpoints)
+
+### Deploy to Any Platform
+
+Since this is a standard Express.js application, you can deploy it to any platform that supports Node.js:
+
+#### **Option 1: Railway (Recommended - Free)**
+1. Push your code to GitHub
+2. Go to [Railway](https://railway.app) and sign up
+3. Create new project from GitHub repo
+4. Railway will automatically detect it's a Node.js app
+5. Add environment variables in Railway dashboard
+6. Deploy automatically happens on push to main
+
+#### **Option 2: Render (Free)**
+1. Push code to GitHub  
+2. Go to [Render](https://render.com) and create account
+3. Create new "Web Service" from GitHub repo
+4. Set:
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+5. Add environment variables in Render dashboard
+
+#### **Option 3: Heroku**
+1. Install Heroku CLI
+2. ```bash
+   heroku create your-dictionary-app
+   heroku config:set GOOGLE_API_KEY=your_key
+   heroku config:set GOOGLE_CX_ID=your_cx_id
+   # Add other environment variables
+   git push heroku main
+   ```
+
+#### **Option 4: Docker (Any Cloud Provider)**
+
+The project includes a `Dockerfile` and `docker-compose.yml` for containerized deployment.
+
+**Local Docker Build:**
+```bash
+# Build the image
+docker build -t dictionary-app .
+
+# Run with environment variables
+docker run -p 4000:4000 \
+  -e GOOGLE_API_KEY=your_key \
+  -e GOOGLE_CX_ID=your_cx_id \
+  dictionary-app
+```
+
+**Using Docker Compose (Recommended):**
+```bash
+# Create .env file with your API keys
+cp .env.example .env
+
+# Start the application
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+```
+
+**Deploy to Cloud Platforms:**
+- **Google Cloud Run**: `gcloud run deploy`
+- **AWS ECS/Fargate**: Push to ECR and deploy
+- **DigitalOcean App Platform**: Connect to container registry
+- **Railway**: `railway up` (auto-detects Dockerfile)
+- **Render**: Connect GitHub repo (auto-builds from Dockerfile)
+
+#### **Option 5: DigitalOcean App Platform**
+1. Push to GitHub
+2. Create new app on DigitalOcean
+3. Connect GitHub repo
+4. Platform auto-detects Node.js
+5. Add environment variables
+6. Deploy
+
+### Environment Variables for Production
+
+Make sure to set these environment variables on your hosting platform:
+
+```
+# For Google Images (recommended)
+GOOGLE_API_KEY=your_google_api_key
+GOOGLE_CX_ID=your_search_engine_id
+
+# Alternative image APIs
+UNSPLASH_ACCESS_KEY=your_unsplash_key
+PIXABAY_API_KEY=your_pixabay_key
+
+# Optional dictionary fallback
+RAPIDAPI_KEY=your_rapidapi_key
+
+# Port (usually set automatically by hosting platform)
+PORT=4000
+```
+
+**Note**: The app works without any API keys using placeholder images.
 
 ## API Usage
 
