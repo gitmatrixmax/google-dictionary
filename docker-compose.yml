@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  dictionary-app:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      # Add your API keys here or use .env file
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_CX_ID=${GOOGLE_CX_ID}
+      - UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY}
+      - PIXABAY_API_KEY=${PIXABAY_API_KEY}
+    env_file:
+      - .env  # Optional: load from .env file
+    restart: unless-stopped

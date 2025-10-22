@@ -303,9 +303,16 @@ async function getPixabayImages(word) {
 }
 
 // Serve client in production
-app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+const staticPath = process.env.STATIC_PATH 
+  ? path.join(process.env.STATIC_PATH, 'client', 'dist')
+  : path.join(__dirname, '..', 'client', 'dist');
+
+app.use(express.static(staticPath));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+  const indexPath = process.env.STATIC_PATH
+    ? path.join(process.env.STATIC_PATH, 'client', 'dist', 'index.html')
+    : path.join(__dirname, '..', 'client', 'dist', 'index.html');
+  res.sendFile(indexPath);
 });
 
 module.exports = app;

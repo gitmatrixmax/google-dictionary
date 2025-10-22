@@ -1,0 +1,14 @@
+node_modules
+client/node_modules
+client/dist
+.git
+.gitignore
+README.md
+.env
+.env.local
+.env.example
+Dockerfile
+.dockerignore
+coverage
+.nyc_output
+.github

@@ -14,6 +14,54 @@ body {
   line-height: 1.6;
 }
 
+/* PWA Install Prompt */
+.install-prompt {
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: white;
+  padding: 12px 20px;
+  margin: -20px -20px 20px -20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.install-prompt span {
+  flex: 1;
+  font-weight: 500;
+}
+
+.install-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.install-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.dismiss-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.dismiss-btn:hover {
+  opacity: 1;
+}
+
 .container {
   max-width: 600px;
   margin: 0 auto;
@@ -293,5 +341,30 @@ body {
   
   .image-item img {
     height: 100px;
+  }
+  
+  /* PWA Mobile Improvements */
+  .install-prompt {
+    margin: -16px -16px 16px -16px;
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .install-btn {
+    align-self: center;
+    min-width: 120px;
+  }
+}
+
+/* PWA Standalone Mode */
+@media (display-mode: standalone) {
+  .container {
+    padding-top: 40px; /* Account for status bar */
+  }
+  
+  .search-header h1 {
+    margin-top: 0;
   }
 }

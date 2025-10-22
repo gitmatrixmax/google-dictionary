@@ -2,11 +2,15 @@
   "name": "dictionary-app",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
+  "bin": "main.js",
   "scripts": {
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "nodemon --watch server --exec node server/index.js",
     "dev:client": "cd client && npm run dev",
     "build": "cd client && npm install && npm run build",
+    "build:exe": "npm run build && pkg . --out-path dist-exe",
+    "build:exe-win": "npm run build && pkg . --targets node18-win-x64 --out-path dist-exe",
     "vercel-build": "npm run build",
     "start": "node server/index.js",
     "test": "jest",
@@ -22,6 +26,16 @@
     "concurrently": "^8.2.0",
     "jest": "^30.2.0",
     "nodemon": "^2.0.22",
+    "pkg": "^5.8.1",
     "supertest": "^7.1.4"
+  },
+  "pkg": {
+    "targets": [
+      "node18-win-x64"
+    ],
+    "assets": [
+      "client/dist/**/*"
+    ],
+    "outputPath": "dist-exe"
   }
 }

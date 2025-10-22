@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 
 export default function App() {
@@ -7,7 +7,31 @@ export default function App() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(false)
   const [imagesLoading, setImagesLoading] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState(null)
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false)
   const audioRef = useRef(null)
+
+  // Handle PWA install prompt
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+      setShowInstallPrompt(true)
+    }
+    
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt()
+      deferredPrompt.userChoice.then((choiceResult) => {
+        setDeferredPrompt(null)
+        setShowInstallPrompt(false)
+      })
+    }
+  }
 
   async function searchWord(e) {
     e && e.preventDefault()
@@ -47,6 +71,15 @@ export default function App() {
 
   return (
     <div className="container">
+      {/* PWA Install Prompt */}
+      {showInstallPrompt && (
+        <div className="install-prompt">
+          <span>📱 Install Dictionary App for quick access!</span>
+          <button onClick={handleInstallClick} className="install-btn">Install</button>
+          <button onClick={() => setShowInstallPrompt(false)} className="dismiss-btn">×</button>
+        </div>
+      )}
+      
       {/* Search header */}
       <div className="search-header">
         <h1>Dictionary</h1>
